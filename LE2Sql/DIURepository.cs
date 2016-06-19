@@ -17,11 +17,17 @@ namespace LE2Sql
 
 		public int BulkInsert(IEnumerable<T> entities)
 		{
+			if (!entities.Any())
+				return 0;
+
 			throw new NotImplementedException();
 		}
 
 		public int BulkUpdate(IEnumerable<T> entities)
 		{
+			if (!entities.Any())
+				return 0;
+
 			throw new NotImplementedException();
 		}
 
@@ -52,6 +58,10 @@ namespace LE2Sql
 
 			updateItems = source.Where(item => existsItems.Any(x => keyPs.All(p => p.GetValue(x).Equals(p.GetValue(item))))).ToList();
 			insertItems = source.Except(updateItems).ToList();
+
+			// 只取得在已存在的資料中，全部都沒有完全符合已存在資料裡面，表示有異動
+			updateItems = updateItems.Where(item => existsItems.All(x => !ps.All(p => p.GetValue(x).Equals(p.GetValue(item))))).ToList();
+
 			return existsItems;
 		}
 
