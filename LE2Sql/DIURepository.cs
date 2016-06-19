@@ -94,5 +94,38 @@ namespace LE2Sql
 			var whereSql = "(" + string.Join(") OR (", pkSqls) + ")";
 			return whereSql;
 		}
+
+		public UpdateResult DeleteThenInsertWithUpdate(IEnumerable<T> source, Expression<Func<T, bool>> predicate)
+		{
+			var deleteCount = DeleteNotExistsItems(source, predicate);
+
+			IList<T> updateItems, insertItems;
+			var existsItems = GetInsertWithUpdateItems(source, predicate, out insertItems, out updateItems);
+			var insertCount = BulkInsert(insertItems);
+			var updateCount = BulkUpdate(updateItems);
+
+			return new UpdateResult
+			{
+				DeleteCount = deleteCount,
+				UpdateCount = updateCount,
+				InsertCount = insertCount,
+				ExistsItems = existsItems,
+				InsertItems = insertItems,
+				UpdateItems = updateItems
+			};
+		}
+
+		public class UpdateResult
+		{
+			public int DeleteCount { get; set; }
+			public int InsertCount { get; set; }
+			public int UpdateCount { get; set; }
+
+			public IEnumerable<T> ExistsItems { get; set; }
+			public IList<T> UpdateItems { get; set; }
+			public IList<T> InsertItems { get; set; }
+		}
+
+
 	}
 }

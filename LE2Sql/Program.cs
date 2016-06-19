@@ -35,20 +35,14 @@ namespace LE2Sql
 			parms: customers);
 
 			//-----------------------------------------------------------
-			var sourceItems = Enumerable.Range(1, 10).Select(i => new Product {  ProductID = i,  ProductName = "qq" + i }).ToList();
+			var sourceItems = Enumerable.Range(1, 10).Select(i => new Product { ProductID = i, ProductName = "qq" + i }).ToList();
 
 			var diuRepo = new DIURepository<Product>();
 
-			diuRepo.DeleteNotExistsItems(sourceItems, x => x.ProductName == "02");
-
-			IList<Product> updateItems, insertItems;
-			diuRepo.GetInsertWithUpdateItems(sourceItems, x => x.ProductName == "02", out insertItems, out updateItems);
-			diuRepo.BulkInsert(insertItems);
-			diuRepo.BulkUpdate(updateItems);
-
+			var updateResult = diuRepo.DeleteThenInsertWithUpdate(sourceItems, x => x.ProductName == "02");
 		}
 
-	
+
 		public class Product
 		{
 			public decimal ProductID { get; set; }
