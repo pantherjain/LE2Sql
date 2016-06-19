@@ -14,7 +14,7 @@ namespace LE2Sql
 
 			var repo = new Repository<Product>();
 
-			// 單筆更新
+			// 單筆或多筆固定更新
 			var customer = new Customer { AddQty = 5 };
 			repo.Update(
 			SET: p => new Product
@@ -34,16 +34,17 @@ namespace LE2Sql
 			WHERE: (p, c) => p.ProductName == "123" && p.Qty > c.AddQty,
 			parms: customers);
 
-			// 額外固定比對欄位
-			repo.Update(
-			SET: (p, c, f) => new Product
-			{
-				Qty = p.Qty + c.AddQty,
-				AccountOpened = f.OwnerName
-			},
-			WHERE: (p, c, f) => p.ProductName == f.Name && p.Qty > c.AddQty,
-			parms: customers,
-			fixedParam: new { OwnerName = "Boss", Name = "123" });
+			//-----------------------------------------------------------
+			var sourceItems = Enumerable.Range(1, 10).Select(i => new Product {  ProductID = i,  ProductName = "qq" + i }).ToList();
+
+			var diuRepo = new DIURepository<Product>();
+
+			diuRepo.DeleteNotExistsItems(sourceItems, x => x.ProductName == "02");
+
+			IList<Product> updateItems, insertItems;
+			diuRepo.GetInsertWithUpdateItems(sourceItems, x => x.ProductName == "02", out insertItems, out updateItems);
+			diuRepo.BulkInsert(insertItems);
+			diuRepo.BulkUpdate(updateItems);
 
 		}
 

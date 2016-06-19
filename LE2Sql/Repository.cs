@@ -69,14 +69,6 @@ namespace LE2Sql
 			throw new NotImplementedException();
 		}
 
-		public int Update<TParam, TFixedParam>(
-			Expression<Func<T, TParam, TFixedParam, T>> SET,
-			Expression<Func<T, TParam, TFixedParam, bool>> WHERE,
-			IEnumerable<TParam> parms, TFixedParam fixedParam)
-		{
-			throw new NotImplementedException();
-		}
-
 		public int Delete(T entity)
 		{
 			throw new NotImplementedException();
