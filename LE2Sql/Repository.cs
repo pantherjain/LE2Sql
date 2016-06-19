@@ -61,18 +61,18 @@ namespace LE2Sql
 			throw new NotImplementedException();
 		}
 
-		public int Update<TEntity>(
-			Expression<Func<T, TEntity, T>> SET,
-			Expression<Func<T, TEntity, bool>> WHERE,
-			IEnumerable<TEntity> parms)
+		public int Update<TParam>(
+			Expression<Func<T, TParam, T>> SET,
+			Expression<Func<T, TParam, bool>> WHERE,
+			IEnumerable<TParam> parms)
 		{
 			throw new NotImplementedException();
 		}
 
-		public int Update<TEntity, TFixedParam>(
-			Expression<Func<T, TEntity, TFixedParam, T>> SET,
-			Expression<Func<T, TEntity, TFixedParam, bool>> WHERE,
-			IEnumerable<TEntity> parms, TFixedParam fixedParam)
+		public int Update<TParam, TFixedParam>(
+			Expression<Func<T, TParam, TFixedParam, T>> SET,
+			Expression<Func<T, TParam, TFixedParam, bool>> WHERE,
+			IEnumerable<TParam> parms, TFixedParam fixedParam)
 		{
 			throw new NotImplementedException();
 		}
@@ -113,6 +113,16 @@ namespace LE2Sql
 		}
 
 		public int Execute(string sql, object parm = null)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int BlukExecute<TParam>(string sql, IEnumerable<TParam> parms)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int BlukExecute<TParam, TFixedParam>(string sql, IEnumerable<TParam> parms, TFixedParam fixedParam)
 		{
 			throw new NotImplementedException();
 		}
